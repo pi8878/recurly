@@ -1,20 +1,20 @@
-import "@/global.css"
-import {FlatList, Image, Pressable, Text, View} from "react-native";
-import {SafeAreaView as RNSafeAreaView} from "react-native-safe-area-context";
-import { styled } from "nativewind";
-import images from "@/constants/images";
-import {HOME_BALANCE} from "@/constants/data";
-import {icons} from "@/constants/icons";
-import {formatCurrency} from "@/lib/utils";
-import dayjs from "dayjs";
-import ListHeading from "@/components/ListHeading";
-import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
-import SubscriptionCard from "@/components/SubscriptionCard";
 import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
-import {useState, useMemo} from "react";
-import { useUser } from '@clerk/expo';
-import { usePostHog } from 'posthog-react-native';
+import ListHeading from "@/components/ListHeading";
+import SubscriptionCard from "@/components/SubscriptionCard";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import { HOME_BALANCE } from "@/constants/data";
+import { icons } from "@/constants/icons";
+import images from "@/constants/images";
+import "@/global.css";
 import { useSubscriptionStore } from "@/lib/subscriptionStore";
+import { formatCurrency } from "@/lib/utils";
+import { useUser } from '@clerk/expo';
+import dayjs from "dayjs";
+import { styled } from "nativewind";
+import { usePostHog } from 'posthog-react-native';
+import { useEffect, useMemo, useState } from "react";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
@@ -23,7 +23,11 @@ export default function App() {
     const posthog = usePostHog();
     const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { subscriptions, addSubscription } = useSubscriptionStore();
+    const { subscriptions, addSubscription, loadFromStorage } = useSubscriptionStore();
+
+    useEffect(() => {
+        loadFromStorage();
+    }, [loadFromStorage]);
 
     // Get upcoming subscriptions (active subscriptions with renewal date within next 7 days)
     const upcomingSubscriptions = useMemo(() => {

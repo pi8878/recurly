@@ -70,11 +70,10 @@ const SignIn = () => {
                     }
                 },
             });
-        } else if (signIn.status === 'needs_second_factor') {
+        } else if (signIn.status === 'needs_second_factor' || signIn.status === 'needs_client_trust') {
             // Handle MFA if needed (not implemented in this basic flow)
-            console.log('MFA required');
-        } else if (signIn.status === 'needs_client_trust') {
-            // Send email code for client trust verification
+            // console.log('MFA required');
+          // Send email code for client trust verification
             const emailCodeFactor = signIn.supportedSecondFactors.find(
                 (factor) => factor.strategy === 'email_code'
             );
@@ -125,7 +124,7 @@ const SignIn = () => {
     };
 
     // Show verification screen if client trust is needed
-    if (signIn.status === 'needs_client_trust') {
+    if (signIn.status === 'needs_second_factor' || signIn.status === 'needs_client_trust') {
         return (
             <SafeAreaView className="auth-safe-area">
                 <KeyboardAvoidingView
@@ -273,7 +272,7 @@ const SignIn = () => {
                                         secureTextEntry
                                         onChangeText={setPassword}
                                         onBlur={() => setPasswordTouched(true)}
-                                        autoComplete="password"
+                                        autoComplete="current-password"
                                     />
                                     {passwordTouched && !passwordValid && (
                                         <Text className="auth-error">Password is required</Text>

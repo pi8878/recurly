@@ -1,16 +1,20 @@
-import {Text, View, TextInput, FlatList} from 'react-native'
-import {SafeAreaView as RNSafeAreaView} from "react-native-safe-area-context";
-import { styled } from "nativewind";
-import { useState } from "react";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import { useSubscriptionStore } from "@/lib/subscriptionStore";
+import { styled } from "nativewind";
+import { useEffect, useState } from "react";
+import { FlatList, Text, TextInput, View } from 'react-native';
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 const Subscriptions = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [expandedId, setExpandedId] = useState<string | null>(null);
-    const { subscriptions } = useSubscriptionStore();
+    const { subscriptions, loadFromStorage } = useSubscriptionStore();
+
+    useEffect(() => {
+        loadFromStorage();
+    }, [loadFromStorage]);
 
     const filteredSubscriptions = subscriptions.filter((subscription) =>
         subscription.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

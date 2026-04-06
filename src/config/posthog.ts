@@ -7,7 +7,7 @@ const rawHost = Constants.expoConfig?.extra?.posthogHost as string | undefined
 // Trim and normalize API key and host
 const apiKey = rawApiKey?.trim()
 const host = rawHost?.trim()
-const isPostHogConfigured = !!apiKey && apiKey !== '' && apiKey !== 'phc_your_project_token_here'
+const isPostHogConfigured = !!apiKey && apiKey !== '' && apiKey !== 'phc_mtuFkYwz9k5QdRxVnmdsSxEdv3Si762tAQEp3Q4QqMEt'
 
 if (!isPostHogConfigured) {
   console.warn(
